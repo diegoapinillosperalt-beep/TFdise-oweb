@@ -1,0 +1,13 @@
+.navbar-brand {
+  font-size: 1.5rem;
+}
+
+.nav-link.active {
+  color: #e63946 !important;
+  font-weight: bold;
+}
+
+.navbar-nav .btn {
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+}

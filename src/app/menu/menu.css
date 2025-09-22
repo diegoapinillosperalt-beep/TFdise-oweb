@@ -1,0 +1,13 @@
+.platos-section {
+  background: linear-gradient(180deg, #f6f1eb, #cdc8c5); /* fondo sutil */
+}
+
+.hover-card {
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.hover-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.2) !important;
+}
+

@@ -1,0 +1,29 @@
+<header>
+  <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top">
+    <div class="container">
+      <a class="navbar-brand fw-bold" routerLink="/">Doña Beny</a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+        <ul class="navbar-nav gap-3">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Principal</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/menu" routerLinkActive="active">Menú</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/contacto" routerLinkActive="active">Contacto</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-danger" routerLink="/promo">Promoción</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
