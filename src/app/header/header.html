@@ -11,7 +11,9 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav gap-3">
           <li class="nav-item">
-            <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Principal</a>
+            <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+              Principal
+            </a>
           </li>
           <li class="nav-item">
             <a class="nav-link" routerLink="/menu" routerLinkActive="active">Menú</a>
@@ -19,6 +21,37 @@
           <li class="nav-item">
             <a class="nav-link" routerLink="/contacto" routerLinkActive="active">Contacto</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/cliente/pedido" routerLinkActive="active">Pedido</a>
+          </li>
+
+          <!-- 🔔 Carrito dinámico -->
+          <li class="nav-item position-relative">
+            <a class="nav-link" routerLink="/cliente/carrito">
+              <i class="bi bi-cart3 fs-5"></i>
+              <span *ngIf="carritoCount > 0"
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {{ carritoCount }}
+              </span>
+            </a>
+          </li>
+
+          
+          <li class="nav-item" *ngIf="!isLoggedIn">
+            <a class="nav-link" routerLink="/cliente/login">Iniciar Sesión</a>
+          </li>
+
+          <li class="nav-item" *ngIf="isLoggedIn">
+            <div class="d-flex align-items-center gap-2">
+              <span class="fw-bold">👤 {{ userEmail }}</span>
+              <button class="btn btn-outline-danger btn-sm" (click)="logout()">Cerrar sesión</button>
+            </div>
+          </li>
+
+
+
+
+
           <li class="nav-item">
             <a class="btn btn-danger" routerLink="/promo">Promoción</a>
           </li>

@@ -1,0 +1,71 @@
+<div class="container mt-5 pt-4">
+  <h2 class="mb-4">💳 Pago</h2>
+
+  <!-- Lista de productos -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Resumen de compra</h5>
+      <ul class="list-group list-group-flush">
+        <li *ngFor="let item of items" class="list-group-item d-flex justify-content-between">
+          <span>{{ item.nombre }} (x{{ item.cantidad || 1 }})</span>
+          <strong>S/ {{ item.precio * (item.cantidad || 1) }}</strong>
+        </li>
+      </ul>
+      <div class="text-end mt-3">
+        <h4>Total: <span class="text-danger">S/ {{ getTotal() }}</span></h4>
+      </div>
+    </div>
+  </div>
+
+  <!-- Selección método de pago -->
+  <div class="mb-3">
+    <label class="form-label fw-bold">Método de pago:</label>
+    <select class="form-select" [(ngModel)]="metodo">
+      <option value="tarjeta">Tarjeta de crédito/débito</option>
+      <option value="yape">Yape</option>
+      <option value="plin">Plin</option>
+    </select>
+  </div>
+
+  <!-- Formulario tarjeta -->
+  <div *ngIf="metodo === 'tarjeta'">
+    <div class="mb-3">
+      <label class="form-label">Número de tarjeta</label>
+      <input type="text" class="form-control" [(ngModel)]="numeroTarjeta" placeholder="1111 2222 3333 4444">
+    </div>
+    <div class="mb-3">
+      <label class="form-label">Nombre del titular</label>
+      <input type="text" class="form-control" [(ngModel)]="nombreTitular" placeholder="Juan Pérez">
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Fecha de expiración (MM/AA)</label>
+        <input type="text" class="form-control" [(ngModel)]="fechaExp" placeholder="05/28">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">CVV</label>
+        <input type="password" class="form-control" [(ngModel)]="cvv" placeholder="123">
+      </div>
+    </div>
+  </div>
+
+  <!-- Formulario Yape/Plin -->
+  <div *ngIf="metodo === 'yape' || metodo === 'plin'">
+    <div class="mb-3">
+      <label class="form-label">Número de celular</label>
+      <input type="text" class="form-control" [(ngModel)]="phone" placeholder="987654321">
+    </div>
+  </div>
+
+  <!-- Botón pagar -->
+  <div class="d-grid gap-2 mt-4">
+    <button class="btn btn-success btn-lg" (click)="procesarPago()" [disabled]="procesando || items.length === 0">
+      {{ procesando ? "Procesando..." : "Pagar ahora" }}
+    </button>
+  </div>
+
+  <!-- Mensajes -->
+  <div class="mt-3">
+    <p class="alert alert-info" *ngIf="mensaje">{{ mensaje }}</p>
+  </div>
+</div>

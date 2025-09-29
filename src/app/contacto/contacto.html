@@ -1,1 +1,53 @@
-<p>contacto works!</p>
+<section class="wrap">
+  <h1 class="ttl">Contáctanos</h1>
+
+  <div class="grid">
+    <!-- Información -->
+    <aside class="card info">
+      <h3>Información</h3>
+      <ul>
+        <li>Jr. Ejemplo 123, Lima, Perú</li>
+        <li>+51 999 888 777</li>
+        <li><a href="https://wa.me/51999888777" target="_blank" rel="noopener">Escríbenos por WhatsApp</a></li>
+        <li><a href="mailto:contacto@donabeny.com">contacto@donabeny.com</a></li>
+        <li>Horario: Lun–Dom 12:00–22:00</li>
+      </ul>
+    </aside>
+
+    <!-- Formulario -->
+    <article class="card form">
+      <h3>Escríbenos</h3>
+
+      <form [formGroup]="form" (ngSubmit)="enviar()">
+        <div class="row">
+          <label>Nombre
+            <input formControlName="nombre" placeholder="Tu nombre" />
+            <small class="err" *ngIf="f['nombre'].touched && f['nombre'].invalid">Obligatorio</small>
+          </label>
+
+          <label>Correo
+            <input type="email" formControlName="correo" placeholder="tucorreo@ejemplo.com" />
+            <small class="err" *ngIf="f['correo'].touched && f['correo'].invalid">Correo válido requerido</small>
+          </label>
+        </div>
+
+        <label>Mensaje
+          <textarea rows="4" formControlName="mensaje" placeholder="Cuéntanos en qué te ayudamos"></textarea>
+          <small class="err" *ngIf="f['mensaje'].touched && f['mensaje'].invalid">Al menos 10 caracteres</small>
+        </label>
+
+        <button type="submit" class="btn-enviar" [disabled]="form.invalid || cargando">
+          {{ cargando ? 'Enviando…' : 'Enviar' }}
+        </button>
+
+        <p class="hint">Incluye alternativas al formulario (teléfono, email, WhatsApp) para no bloquear el contacto.</p>
+        <p class="ok" *ngIf="enviado">¡Gracias! Te responderemos pronto.</p>
+      </form>
+    </article>
+  </div>
+
+  <!-- Mapa -->
+  <div class="map-container">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m13!1m8!1m3!1d975.5239696107786!2d-76.93009!3d-12.03692!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTLCsDAyJzEyLjkiUyA3NsKwNTUnNDguMyJX!5e0!3m2!1ses!2sus!4v1758513844641!5m2!1ses!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+  </div>
+</section>
