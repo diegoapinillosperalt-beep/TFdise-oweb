@@ -15,6 +15,7 @@ export class Header {
   carritoCount = 0;
   isLoggedIn = false;
   userEmail: string | null = null;
+  isAdmin = false; // 🔥 bandera para admins
 
   constructor(
     private carritoService: CarritoService,
@@ -32,7 +33,10 @@ export class Header {
     this.authService.isLoggedIn$.subscribe(status => this.isLoggedIn = status);
     this.authService.userEmail$.subscribe(email => this.userEmail = email);
 
-    this.authService.checkLocalStorage(); // recuperar sesión si estaba guardada
+    // ✅ admin (ejemplo: tu AuthService debería exponer un observable/flag)
+    this.authService.isAdmin$.subscribe(role => this.isAdmin = role);
+
+    this.authService.checkLocalStorage(); // recuperar sesión
   }
 
   private getCarritoCount(items?: any[]): number {

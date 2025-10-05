@@ -10,6 +10,7 @@
 
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav gap-3">
+          <!-- Opciones generales -->
           <li class="nav-item">
             <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
               Principal
@@ -36,7 +37,7 @@
             </a>
           </li>
 
-          
+          <!-- Sesión -->
           <li class="nav-item" *ngIf="!isLoggedIn">
             <a class="nav-link" routerLink="/cliente/login">Iniciar Sesión</a>
           </li>
@@ -48,10 +49,12 @@
             </div>
           </li>
 
+          <!-- 🔹 Botón de Admin (solo visible si es admin) -->
+          <li class="nav-item" *ngIf="isAdmin">
+            <a class="btn btn-dark" routerLink="/admin">Panel Admin</a>
+          </li>
 
-
-
-
+          <!-- Botón promoción (para todos) -->
           <li class="nav-item">
             <a class="btn btn-danger" routerLink="/promo">Promoción</a>
           </li>

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { Header } from './header/header';
+import { CommonModule } from '@angular/common'; // <-- necesario para ngClass y ngFor
 
 @Component({
   selector: 'app-root',
