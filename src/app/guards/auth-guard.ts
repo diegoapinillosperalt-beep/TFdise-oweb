@@ -4,17 +4,15 @@ import { AuthService } from '../services/auth';
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate {
-  private isLoggedIn = false;
-
-  constructor(private authService: AuthService, private router: Router) {
-    this.authService.isLoggedIn$.subscribe(status => this.isLoggedIn = status);
-  }
+  constructor(private authService: AuthService, private router: Router) {}
 
   canActivate(): boolean {
-    if (this.isLoggedIn) {
+    const isLoggedIn = this.authService.isLoggedIn();
+
+    if (isLoggedIn) {
       return true;
     } else {
-      this.router.navigate(['/cliente/login']); // si no está logueado, redirige
+      this.router.navigate(['/cliente/login']);
       return false;
     }
   }

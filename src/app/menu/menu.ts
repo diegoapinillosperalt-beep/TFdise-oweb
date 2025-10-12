@@ -1,43 +1,51 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
 import { CarritoService } from '../services/carrito';
+import { MenuService, Plato } from '../services/menu';
 
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [CommonModule,RouterModule,FormsModule], // 👈 necesario para *ngFor, *ngIf, etc.
+  imports: [CommonModule, RouterModule, FormsModule], // ✅ no necesitamos HttpClientModule aquí
   templateUrl: './menu.html',
   styleUrls: ['./menu.css']
 })
-export class Menu {
+export class Menu implements OnInit {
   searchTerm = '';
-  platos = [
-    { id: 1, nombre: 'ANTICUCHO', precio: 15, img: 'ANTICUCHO.png' },
-    {  id: 2,nombre: 'CALDO DE GALLINA', precio: 18, img: 'CALDODEGALLINA.png' },
-    {  id: 3,nombre: 'HUMIDA DULCE', precio: 14, img: 'HUMITADULCE.png' },
-    {  id: 4,nombre: 'HUMITA SALADA', precio: 20, img: 'HUMITASALADA.png' },
-    {  id: 5,nombre: 'MAZAMORRA MORADA', precio: 16, img: 'MAZMORADA.png' },
-    {  id: 6,nombre: 'ARROZ CON LECHE', precio: 22, img: 'ARRZLECHE.png' },
-    {  id: 7,nombre: 'PAPA RELLENA', precio: 17, img: 'PAPARELLENA.png' },
-    {  id: 8,nombre: 'TRIPITA', precio: 19, img: 'TRIPITA.png' },
-    {  id: 9,nombre: 'Carapulcra', precio: 21, img: 'logoprincipal.png' }
-  ];
-  
-  constructor(private carritoService: CarritoService) {}
+  platos: { id: number; nombre: string; precio: number; img: string }[] = [];
 
+  constructor(
+    private carritoService: CarritoService,
+    private menuService: MenuService
+  ) {}
+
+  ngOnInit(): void {
+    // Consumir API local
+    this.menuService.listarMenu().subscribe({
+      next: (data) => {
+        this.platos = data.map(p => ({
+  id: p.idPlato ?? 0,
+  nombre: p.Plato,
+  precio: p.Precio,
+  img: (p.URLImagen && p.URLImagen.trim() !== '') 
+       ? 'http://localhost:3000/uploads/' + p.URLImagen 
+       : 'assets/logoprincipal.png'
+}));
+
+      },
+      error: (err) => console.error('Error al cargar el menú', err)
+    });
+  }
 
   get platosFiltrados() {
-      return this.platos.filter(p =>
-        p.nombre.toLowerCase().includes(this.searchTerm.toLowerCase())
-      );
-    }
+    return this.platos.filter(p =>
+      p.nombre.toLowerCase().includes(this.searchTerm.toLowerCase())
+    );
+  }
 
   agregarAlCarrito(plato: any) {
-      this.carritoService.addItem(plato);
-    }
-
-
+    this.carritoService.addItem(plato);
+  }
 }

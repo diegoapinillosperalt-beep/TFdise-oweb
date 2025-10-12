@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CarritoService, Producto } from '../../services/carrito';
 import { AuthService } from '../../services/auth';
+import { DatosPedidoService, DatosPedido } from '../../services/datospedido';
+import { PedidoService } from '../../services/pedido';
 
 @Component({
   selector: 'app-pago',
@@ -13,69 +15,74 @@ import { AuthService } from '../../services/auth';
   styleUrls: ['./pago.css']
 })
 export class Pago {
-  // Form
   metodo: 'tarjeta' | 'yape' | 'plin' = 'tarjeta';
   numeroTarjeta = '';
   nombreTitular = '';
   fechaExp = '';
   cvv = '';
-  phone = ''; // para Yape/Plin
-
-  // Estado
+  phone = '';
   mensaje = '';
   procesando = false;
-
-  // Carrito
   items: Producto[] = [];
+  datosPedido: DatosPedido;
 
   constructor(
     private carritoService: CarritoService,
     private authService: AuthService,
+    private pedidoService: PedidoService,
+    private datosPedidoService: DatosPedidoService,
     private router: Router
   ) {
     this.items = this.carritoService.getItems();
+    this.datosPedido = this.datosPedidoService.getDatos();
   }
 
   getTotal(): number {
     return this.items.reduce((acc, i) => acc + (i.precio * (i.cantidad || 1)), 0);
   }
 
-  validarTarjeta(): boolean {
-    const numOk = /^\d{16}$/.test(this.numeroTarjeta.replace(/\s+/g, ''));
-    const cvvOk = /^\d{3}$/.test(this.cvv);
-    const expOk = /^(0[1-9]|1[0-2])\/\d{2}$/.test(this.fechaExp);
-    const nameOk = this.nombreTitular.trim().length > 2;
-    return numOk && cvvOk && expOk && nameOk;
-  }
+  async procesarPago() {
+  this.procesando = true;
+  this.mensaje = '';
 
-  procesarPago() {
-    this.mensaje = '';
-    if (this.metodo === 'tarjeta') {
-      if (!this.validarTarjeta()) {
-        this.mensaje = '⚠️ Verifica los datos de la tarjeta (16 dígitos, MM/AA, CVV 3 dígitos).';
-        return;
-      }
-    } else {
-      if (!/^\d{9,12}$/.test(this.phone)) {
-        this.mensaje = '⚠️ Ingresa un número de teléfono válido para Yape/Plin.';
-        return;
-      }
+  try {
+    const usuarioId = this.authService.getUserId();
+    if (!usuarioId) {
+      this.mensaje = 'Debes iniciar sesión para continuar.';
+      this.procesando = false;
+      return;
     }
 
-    this.procesando = true;
-    this.mensaje = '⏳ Procesando pago...';
-
-    setTimeout(() => {
+    if (this.items.length === 0) {
+      this.mensaje = 'Tu carrito está vacío.';
       this.procesando = false;
-      this.mensaje = '✅ Pago realizado con éxito. ¡Gracias por tu compra!';
+      return;
+    }
 
-      // ✅ limpiar carrito al finalizar
-      this.carritoService.clearCart();
+    // ⚡ Asegurarse de que haya un distrito seleccionado o dar un valor por defecto
+    if (!this.datosPedido.idDistrito) {
+      this.datosPedido.idDistrito = 1; // ⚡ solo si 1 existe en la tabla Distritos
+      // o mostrar error en vez de asignar valor por defecto
+      // this.mensaje = 'Debes seleccionar un distrito.';
+      // this.procesando = false;
+      // return;
+    }
 
-      setTimeout(() => {
-        this.router.navigate(['/cliente/pedido']);
-      }, 1500);
-    }, 1200);
+    await this.pedidoService
+      .crearPedido(usuarioId, this.datosPedido, this.items, this.metodo)
+      .toPromise();
+
+    this.carritoService.clearCart();
+    this.datosPedidoService.clear();
+
+    this.mensaje = '✅ Pedido realizado con éxito.';
+    setTimeout(() => this.router.navigate(['/']), 2000);
+  } catch (err) {
+    console.error('Error al crear pedido:', err);
+    this.mensaje = '❌ Ocurrió un error al procesar el pedido.';
+  } finally {
+    this.procesando = false;
   }
+}
 
 }

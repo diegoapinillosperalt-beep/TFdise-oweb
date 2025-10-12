@@ -2,17 +2,20 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CarritoService } from '../../services/carrito';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-carrito',
   standalone: true,
-  imports: [CommonModule, FormsModule,RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './carrito.html',
   styleUrls: ['./carrito.css']
 })
 export class Carrito {
-  constructor(private carritoService: CarritoService) {}
+  constructor(
+    private carritoService: CarritoService,
+    private router: Router
+  ) {}
 
   get items() {
     return this.carritoService.getItems();
@@ -27,10 +30,19 @@ export class Carrito {
   }
 
   vaciar() {
-    this.carritoService.clearCart();   // ✅ usar este nombre
+    this.carritoService.clearCart();
   }
 
   actualizarCantidad(id: string | number, cantidad: number | undefined) {
-    this.carritoService.actualizarCantidad(id, cantidad ?? 1);  // ✅ usar este nombre
+    this.carritoService.actualizarCantidad(id, cantidad ?? 1);
+  }
+
+  continuarPedido() {
+    if (this.items.length === 0) {
+      alert('Tu carrito está vacío.');
+      return;
+    }
+    // 🚀 Ir al siguiente paso del flujo
+    this.router.navigate(['/datospedido']);
   }
 }

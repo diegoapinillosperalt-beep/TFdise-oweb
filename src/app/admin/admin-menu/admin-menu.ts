@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AdminMenuForm } from '../admin-menu-form/admin-menu-form'; // importa el form
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { MenuService, Plato } from '../../services/menu';
 
 interface Producto {
   id: number;
@@ -17,29 +18,39 @@ interface Producto {
   selector: 'app-admin-menu',
   templateUrl: './admin-menu.html',
   styleUrls: ['./admin-menu.css'],
-  imports:[FormsModule,CommonModule]
+  imports: [FormsModule, CommonModule]
 })
 export class AdminMenu {
 
-  // ⚡ usamos los productos de AdminMenuForm
-  get productos(): Producto[] {
-    return AdminMenuForm.products;
+  productos: Plato[] = [];  // ahora será la lista desde la BD
+
+  constructor(private router: Router, private menuService: MenuService) {}
+
+  ngOnInit(): void {
+    this.cargarProductos();
   }
 
-  constructor(private router: Router) {}
+  cargarProductos() {
+    this.menuService.listarMenu().subscribe(data => {
+      this.productos = data;
+    });
+  }
 
   nuevoProducto() {
-  this.router.navigate(['/admin/admin-menu/form']);
-}
-
-  editarProducto(id: number) {
-  this.router.navigate([`/admin/admin-menu/form/${id}`]);
-}
-
-  eliminarProducto(id: number) {
-    const index = AdminMenuForm.products.findIndex(p => p.id === id);
-    if (index > -1) {
-      AdminMenuForm.products.splice(index, 1);
-    }
+    this.router.navigate(['/admin/admin-menu/form']);
   }
+
+editarProducto(id?: number) {
+  if (!id) return;
+  this.router.navigate(['/admin/admin-menu/form', id]); // coincide con la ruta
 }
+
+
+
+eliminarProducto(id?: number) {
+  if (id === undefined) return;
+  // lógica de eliminar
+}
+
+}
+

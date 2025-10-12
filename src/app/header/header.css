@@ -1,13 +1,126 @@
+/* ==================================== */
+/* 1. Fondo del Header y Contraste Base */
+/* ==================================== */
+.navbar {
+    /* Nuevo fondo marrón oscuro */
+    background-color: #804000 !important; 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4) !important; /* Sombra más fuerte para contraste */
+}
+
+/* ==================================== */
+/* 2. Marca y Enlaces Base (Claros) */
+/* ==================================== */
 .navbar-brand {
-  font-size: 1.5rem;
+    font-size: 1.75rem;
+    font-family: 'Georgia', serif;
+    /* Color de la marca en un tono crema o dorado suave */
+    color: #f8f9fa !important; 
+    transition: color 0.3s ease;
 }
 
+.navbar-brand:hover {
+    color: #ffd700 !important; /* Dorado al pasar el ratón */
+}
+
+.nav-link {
+    /* Color de texto base: Blanco para máxima legibilidad */
+    color: #ffffff !important; 
+    font-weight: 500;
+    transition: color 0.3s ease, border-bottom 0.3s ease;
+    padding-bottom: 0.5rem;
+}
+
+.nav-link:hover:not(.active) {
+    /* Se vuelve un poco más brillante al pasar el ratón */
+    color: #ffd700 !important; 
+}
+
+/* ==================================== */
+/* 3. Enlace Activo (Rojo Principal) */
+/* ==================================== */
 .nav-link.active {
-  color: #e63946 !important;
-  font-weight: bold;
+    /* Mantenemos el rojo principal para el acento */
+    color: #e63946 !important; 
+    font-weight: bold;
+    /* El borde inferior usa el color de acento */
+    border-bottom: 3px solid #e63946; 
 }
 
+/* ==================================== */
+/* 4. Carrito y Contadores */
+/* ==================================== */
+.bi-cart3 {
+    /* Ícono blanco */
+    color: #ffffff; 
+    font-size: 1.4rem !important;
+    transition: color 0.3s ease;
+}
+
+.nav-link:hover .bi-cart3 {
+    color: #ffd700; /* El carrito se vuelve dorado al pasar el ratón */
+}
+
+.badge.bg-danger {
+    /* El badge rojo destaca perfectamente sobre el marrón */
+    background-color: #e63946 !important; 
+    box-shadow: 0 0 5px rgba(230, 57, 70, 0.5); 
+}
+
+/* ==================================== */
+/* 5. Estilos de Usuario y Botones */
+/* ==================================== */
+
+/* Información de usuario (Email) */
+.d-flex.align-items-center > span {
+    color: #f8f9fa; /* Asegura que el email sea legible */
+}
+
+/* Botón de Promoción (Rojo) */
+.btn-danger {
+    /* El botón rojo sigue siendo un excelente punto de atención */
+    background-color: #e63946;
+    border-color: #e63946;
+}
+.btn-danger:hover {
+    background-color: #c9323f;
+    border-color: #c9323f;
+}
+
+/* Botón de Admin (Oscuro, ajustado para el nuevo fondo) */
+.btn-dark {
+    /* Usamos un negro más cálido para el Admin */
+    background-color: #1d3557; 
+    border-color: #1d3557;
+    color: #ffffff !important;
+}
+
+.btn-dark:hover {
+    background-color: #457b9d; 
+    border-color: #457b9d;
+}
+
+/* Botón Cerrar Sesión (Outline Danger) */
+.btn-outline-danger {
+    /* Borde rojo sobre fondo marrón */
+    border-color: #e63946;
+    color: #e63946;
+}
+
+.btn-outline-danger:hover {
+    /* Inversión al pasar el ratón */
+    background-color: #e63946;
+    color: white;
+}
+
+/* Botones con estilo 'pill' */
 .navbar-nav .btn {
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
+    border-radius: 50px; 
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+header {
+  /* Reduce el espacio vertical dentro del header */
+  padding-top: 15px;
+  padding-bottom: 15px;
 }

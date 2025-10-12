@@ -21,23 +21,24 @@
       </thead>
       <tbody>
         <tr *ngFor="let producto of productos">
-          <td>{{ producto.id }}</td>
-          <td class="fw-semibold">{{ producto.nombre }}</td>
-          <td class="text-success fw-bold">S/ {{ producto.precio }}</td>
-          <td>{{ producto.descripcion }}</td>
+          <td>{{ producto.idPlato }}</td>
+          <td class="fw-semibold">{{ producto.Plato }}</td>
+          <td class="text-success fw-bold">S/ {{ producto.Precio }}</td>
+          <td>{{ producto.Descripcion }}</td>
           <td class="text-center">
             <button 
               class="btn btn-warning btn-sm me-2"
-              (click)="editarProducto(producto.id)">
+              (click)="editarProducto(producto.idPlato)">
               ✏️ Editar
             </button>
             <button 
               class="btn btn-danger btn-sm"
-              (click)="eliminarProducto(producto.id)">
+              (click)="eliminarProducto(producto.idPlato)">
               🗑️ Eliminar
             </button>
           </td>
         </tr>
+
       </tbody>
     </table>
   </div>

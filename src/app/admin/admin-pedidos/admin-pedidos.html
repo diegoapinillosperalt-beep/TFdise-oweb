@@ -1,36 +1,39 @@
-<div class="cards-container">
-  <div *ngFor="let pedido of pedidos" 
-       class="card"
-       [ngClass]="{
-         'card-pendiente': pedido.estado === 'Pendiente',
-         'card-en-camino': pedido.estado === 'En camino',
-         'card-entregado': pedido.estado === 'Entregado'
-       }">
+<div class="container mt-5" *ngIf="pedidos.length > 0; else noPedidos">
+  <div *ngFor="let pedido of pedidos" class="card mb-4 shadow-sm border-primary">
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+      <span>Pedido #{{ pedido.idPedido }}</span>
+      <small>{{ pedido.FechaPedido | date:'short' }}</small>
+    </div>
 
-    <!-- Icono de estado -->
-    <div class="icono-estado"
-         [ngClass]="{
-           'icono-pendiente': pedido.estado === 'Pendiente',
-           'icono-en-camino': pedido.estado === 'En camino',
-           'icono-entregado': pedido.estado === 'Entregado'
-         }"></div>
+    <div class="card-body">
+      <p><strong>Cliente:</strong> {{ pedido.cliente }}</p>
 
-    <h3>Pedido #{{ pedido.id }}</h3>
-    <p>Cliente: {{ pedido.cliente }}</p>
-    <p>Fecha: {{ pedido.fecha }}</p>
-    <p>Total: S/. {{ pedido.total }}</p>
+      <div class="mb-3">
+        <label class="form-label"><strong>Estado:</strong></label>
+        <select [(ngModel)]="pedido.idEstado"
+                (change)="cambiarEstado(pedido, pedido.idEstado)"
+                class="form-select w-auto d-inline-block">
+          <option *ngFor="let e of estados" [value]="e.id">{{ e.nombre }}</option>
+        </select>
+      </div>
 
-    <p [ngClass]="{
-      'estado-pendiente': pedido.estado === 'Pendiente',
-      'estado-en-camino': pedido.estado === 'En camino',
-      'estado-entregado': pedido.estado === 'Entregado'
-    }">
-      Estado: {{ pedido.estado }}
-    </p>
+      <ul class="list-group list-group-flush mb-3">
+        <li class="list-group-item d-flex justify-content-between align-items-center"
+            *ngFor="let d of pedido.detalles">
+          <span>{{ d.nombrePlato }} x{{ d.Cantidad }}</span>
+          <span>S/ {{ d.Subtotal.toFixed(2) }}</span>
+        </li>
+      </ul>
 
-    <div style="margin-top: 10px;">
-      <button class="btn btn-en-camino" *ngIf="pedido.estado !== 'En camino'" (click)="cambiarEstado(pedido, 'En camino')">En camino</button>
-      <button class="btn btn-entregado" *ngIf="pedido.estado !== 'Entregado'" (click)="cambiarEstado(pedido, 'Entregado')">Entregado</button>
+      <div class="d-flex justify-content-end">
+        <strong>Total: S/ {{ getTotal(pedido.detalles).toFixed(2) }}</strong>
+      </div>
     </div>
   </div>
 </div>
+
+<ng-template #noPedidos>
+  <div class="text-center mt-5">
+    <p class="fs-5 text-muted">No hay pedidos disponibles.</p>
+  </div>
+</ng-template>

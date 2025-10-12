@@ -1,65 +1,119 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-
-interface Product {
-  id: number;
-  nombre: string;
-  descripcion: string;
-  precio: number;
-  categoria: string;
-  disponible: boolean;
-}
+import { CommonModule } from '@angular/common';
+import { MenuService, Plato } from '../../services/menu';
+import { CategoriaService } from '../../services/categoria';
 
 @Component({
   selector: 'app-admin-menu-form',
   templateUrl: './admin-menu-form.html',
   styleUrls: ['./admin-menu-form.css'],
   standalone: true,
-  imports: [FormsModule]
+  imports: [FormsModule, CommonModule]
 })
 export class AdminMenuForm {
-  producto: Product = {
-    id: 0,
-    nombre: '',
-    descripcion: '',
-    precio: 0,
-    categoria: '',
-    disponible: true
+
+  producto: Plato = {
+    idPlato: 0,
+    idCategoria: 0,
+    Plato: '',
+    Descripcion: '',
+    Precio: 0,
+    URLImagen: ''
   };
 
   editMode = false;
+  categorias: { id: number; nombre: string }[] = [];
 
-  static products: Product[] = [
-    { id: 1, nombre: 'Lomo Saltado', descripcion: 'Clásico peruano', precio: 25, categoria: 'Plato Fuerte', disponible: true },
-    { id: 2, nombre: 'Ceviche', descripcion: 'Pescado fresco con limón', precio: 30, categoria: 'Entrada', disponible: true }
-  ];
+  // ✅ Nueva propiedad para almacenar la imagen
+  imagenSeleccionada: File | null = null;
+  imagenTemporal: string | null = null; // 👈 agrega esta línea
 
-  constructor(private route: ActivatedRoute, private router: Router) {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    if (id) {
-      this.editMode = true;
-      const encontrado = AdminMenuForm.products.find(p => p.id === id);
-      if (encontrado) {
-        this.producto = { ...encontrado };
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private menuService: MenuService,
+    private categoriaService: CategoriaService
+  ) {
+    this.cargarCategorias();
+
+    const idParam = this.route.snapshot.paramMap.get('id');
+    if (idParam) {
+      const id = Number(idParam);
+      if (!isNaN(id)) {
+        this.editMode = true;
+        this.cargarProducto(id);
       }
     }
   }
 
-  guardarProducto() {
-    if (this.editMode) {
-      const index = AdminMenuForm.products.findIndex(p => p.id === this.producto.id);
-      if (index > -1) {
-        AdminMenuForm.products[index] = this.producto;
-      }
-    } else {
-      const nuevoId = AdminMenuForm.products.length > 0
-        ? Math.max(...AdminMenuForm.products.map(p => p.id)) + 1
-        : 1;
-      this.producto.id = nuevoId;
-      AdminMenuForm.products.push(this.producto);
+  // 🔹 Cargar categorías desde el backend
+  cargarCategorias() {
+    this.categoriaService.listarCategorias().subscribe({
+      next: data => {
+        this.categorias = data.map(c => ({ id: c.idCategoria, nombre: c.Categoria }));
+      },
+      error: err => console.error('Error cargando categorías:', err)
+    });
+  }
+
+  // 🔹 Cargar plato cuando se edita
+  cargarProducto(id: number) {
+    this.menuService.listarMenu().subscribe({
+      next: platos => {
+        const encontrado = platos.find(p => p.idPlato === id);
+        if (encontrado) {
+          this.producto = { ...encontrado, idPlato: encontrado.idPlato };
+          console.log('Producto cargado:', this.producto);
+        } else {
+          this.router.navigate(['/admin/admin-menu']);
+        }
+      },
+      error: err => console.error('Error cargando plato:', err)
+    });
+  }
+
+  // 🔹 Capturar imagen seleccionada
+  onFileSelected(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.imagenSeleccionada = file;
+      console.log('📸 Imagen seleccionada:', file.name);
     }
-    this.router.navigate(['/admin/admin-menu']);
+  }
+
+  // 🔹 Guardar o editar producto con FormData
+  guardarProducto() {
+    console.log('Producto a enviar:', this.producto);
+
+    const formData = new FormData();
+    formData.append('idCategoria', this.producto.idCategoria.toString());
+    formData.append('Plato', this.producto.Plato);
+    formData.append('Descripcion', this.producto.Descripcion);
+    formData.append('Precio', this.producto.Precio.toString());
+
+    if (this.imagenSeleccionada) {
+      formData.append('imagen', this.imagenSeleccionada);
+    }
+
+    if (this.editMode) {
+      this.menuService.editarPlatoFormData(this.producto.idPlato!, formData).subscribe({
+        next: res => {
+          console.log('✅ Edición exitosa', res);
+          this.router.navigate(['/admin/admin-menu']);
+        },
+        error: err => console.error('❌ Error al editar plato:', err)
+      });
+    } else {
+      this.menuService.crearPlatoFormData(formData).subscribe({
+        next: res => {
+          console.log('✅ Plato creado correctamente', res);
+          this.router.navigate(['/admin/admin-menu']);
+        },
+        error: err => console.error('❌ Error al crear plato:', err)
+      });
+    }
   }
 
   cancelar() {

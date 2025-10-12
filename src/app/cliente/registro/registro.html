@@ -1,0 +1,94 @@
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light">
+  <div class="card shadow-lg p-4 border-0" style="width: 100%; max-width: 420px; border-radius: 1rem;">
+    <div class="text-center mb-4">
+      <img src="logo.ico" alt="Logo" width="80" class="mb-3" *ngIf="logoVisible">
+      <h2 class="fw-bold text-success">Crear Cuenta</h2>
+      <p class="text-muted mb-0">Regístrate para comenzar a disfrutar</p>
+    </div>
+
+    <form (ngSubmit)="onRegister()">
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Nombre completo</label>
+        <input 
+          type="text" 
+          [(ngModel)]="nombre" 
+          name="nombre" 
+          placeholder="Tu nombre completo" 
+          class="form-control form-control-lg" 
+          required
+        >
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Correo electrónico</label>
+        <input 
+          type="email" 
+          [(ngModel)]="correo" 
+          name="correo" 
+          placeholder="ejemplo@correo.com" 
+          class="form-control form-control-lg" 
+          required
+        >
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Contraseña</label>
+        <input 
+          type="password" 
+          [(ngModel)]="contrasena" 
+          name="contrasena" 
+          placeholder="••••••••" 
+          class="form-control form-control-lg" 
+          required
+        >
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label fw-semibold">Dirección</label>
+        <input 
+          type="text" 
+          [(ngModel)]="direccion" 
+          name="direccion" 
+          placeholder="Calle, número, distrito..." 
+          class="form-control form-control-lg" 
+          required
+        >
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label fw-semibold">Teléfono</label>
+        <input 
+          type="text" 
+          [(ngModel)]="telefono" 
+          name="telefono" 
+          placeholder="+51 987654321" 
+          class="form-control form-control-lg" 
+          required
+        >
+      </div>
+
+      <button 
+        type="submit" 
+        class="btn btn-success btn-lg w-100 fw-semibold" 
+        style="border-radius: 0.5rem;"
+      >
+        Registrar
+      </button>
+    </form>
+
+    <div *ngIf="successMessage" class="text-success text-center mt-3 fw-semibold">
+      {{ successMessage }}
+    </div>
+    <div *ngIf="errorMessage" class="text-danger text-center mt-3 fw-semibold">
+      {{ errorMessage }}
+    </div>
+
+    <div class="text-center mt-4">
+      <small class="text-muted">¿Ya tienes cuenta? 
+        <a [routerLink]="['/cliente/login']" class="text-success text-decoration-none fw-semibold">
+          Inicia sesión
+        </a>
+      </small>
+    </div>
+  </div>
+</div>

@@ -1,23 +1,51 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AdminPedidoService, PedidoAdmin } from '../../services/admin-pedido';
 
 @Component({
   selector: 'app-admin-pedidos',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './admin-pedidos.html',
   styleUrls: ['./admin-pedidos.css']
 })
-export class AdminPedidosComponent {
-  pedidos = [
-    { id: 1, cliente: 'Juan Perez', fecha: '2025-10-03', total: 50, estado: 'Pendiente' },
-    { id: 2, cliente: 'Maria Lopez', fecha: '2025-10-03', total: 80, estado: 'En camino' },
-    { id: 3, cliente: 'Carlos Ruiz', fecha: '2025-10-02', total: 35, estado: 'Entregado' },
-    { id: 4, cliente: 'Ana Torres', fecha: '2025-10-02', total: 60, estado: 'Pendiente' },
-    { id: 5, cliente: 'Luis Ramos', fecha: '2025-10-01', total: 45, estado: 'En camino' },
+export class AdminPedidosComponent implements OnInit {
+  pedidos: PedidoAdmin[] = [];
+
+  // 🔹 Ahora es un arreglo de objetos con id y nombre
+  estados = [
+    { id: '1', nombre: 'Pendiente' },
+    { id: '2', nombre: 'En camino' },
+    { id: '3', nombre: 'Entregado' }
   ];
 
-  cambiarEstado(pedido: any, nuevoEstado: string) {
-    pedido.estado = nuevoEstado;
+  constructor(private adminPedidoService: AdminPedidoService) {}
+
+  ngOnInit() {
+    this.cargarPedidos();
+  }
+
+  cargarPedidos() {
+    this.adminPedidoService.obtenerPedidos().subscribe({
+      next: res => this.pedidos = res,
+      error: err => console.error('Error al cargar pedidos:', err)
+    });
+  }
+
+  cambiarEstado(pedido: PedidoAdmin, nuevoEstado: string) {
+    this.adminPedidoService.actualizarEstado(pedido.idPedido, nuevoEstado).subscribe({
+      next: () => pedido.idEstado = nuevoEstado,
+      error: err => console.error('Error al actualizar estado:', err)
+    });
+  }
+
+  getNombreEstado(idEstado: string) {
+    const estado = this.estados.find(e => e.id === idEstado);
+    return estado ? estado.nombre : 'Desconocido';
+  }
+
+  getTotal(detalles: any[]) {
+    return detalles.reduce((sum, d) => sum + d.Subtotal, 0);
   }
 }

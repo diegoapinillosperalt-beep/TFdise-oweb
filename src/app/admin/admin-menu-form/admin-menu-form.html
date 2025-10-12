@@ -4,61 +4,67 @@
   </h2>
 
   <form (ngSubmit)="guardarProducto()" #formProducto="ngForm" class="space-y-4">
+    
     <!-- Nombre -->
     <div>
       <label class="block text-sm font-medium text-gray-700 mb-1">Nombre</label>
-      <input type="text"
-        [(ngModel)]="producto.nombre" name="nombre" required
-        class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-        placeholder="Ej: Lomo Saltado">
+      <input type="text" [(ngModel)]="producto.Plato" name="nombre" required
+             class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+             placeholder="Ej: Lomo Saltado">
     </div>
 
     <!-- Descripción -->
     <div>
       <label class="block text-sm font-medium text-gray-700 mb-1">Descripción</label>
-      <input type="text"
-        [(ngModel)]="producto.descripcion" name="descripcion" required
-        class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-        placeholder="Breve descripción">
+      <input type="text" [(ngModel)]="producto.Descripcion" name="descripcion" required
+             class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+             placeholder="Breve descripción">
     </div>
 
     <!-- Precio -->
     <div>
       <label class="block text-sm font-medium text-gray-700 mb-1">Precio (S/)</label>
-      <input type="number"
-        [(ngModel)]="producto.precio" name="precio" required
-        class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-        placeholder="Ej: 25">
+      <input type="number" [(ngModel)]="producto.Precio" name="precio" required min="0"
+             class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
+             placeholder="Ej: 25">
     </div>
 
     <!-- Categoría -->
     <div>
       <label class="block text-sm font-medium text-gray-700 mb-1">Categoría</label>
-      <input type="text"
-        [(ngModel)]="producto.categoria" name="categoria" required
-        class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none"
-        placeholder="Ej: Plato Fuerte">
+      <select [(ngModel)]="producto.idCategoria" name="idCategoria" required
+              class="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        <option [ngValue]="0" disabled>-- Seleccione categoría --</option>
+        <option *ngFor="let cat of categorias" [ngValue]="cat.id">{{ cat.nombre }}</option>
+      </select>
     </div>
 
-    <!-- Disponible -->
-    <div class="flex items-center">
-      <input type="checkbox"
-        [(ngModel)]="producto.disponible" name="disponible"
-        class="h-4 w-4 text-blue-600 border-gray-300 rounded">
-      <label class="ml-2 block text-sm text-gray-700">Disponible</label>
+    <!-- Imagen -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-1">Imagen del plato</label>
+      <input type="file" (change)="onFileSelected($event)" accept="image/*"
+             class="w-full border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-blue-500 focus:outline-none">
+    </div>
+
+    <!-- Vista previa -->
+    <div *ngIf="imagenSeleccionada || producto.URLImagen" class="mt-4 text-center">
+      <p class="text-sm text-gray-600 mb-2">Vista previa:</p>
+      <img 
+        [src]="imagenSeleccionada ? (imagenTemporal || '') : producto.URLImagen" 
+        alt="Vista previa del plato"
+        class="w-48 h-48 object-cover rounded-lg shadow mx-auto border border-gray-200">
     </div>
 
     <!-- Botones -->
     <div class="flex gap-4 pt-4">
       <button type="submit"
-        [disabled]="formProducto.invalid"
-        class="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 disabled:opacity-50">
+              [disabled]="formProducto.invalid"
+              class="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700 disabled:opacity-50">
         {{ editMode ? 'Actualizar' : 'Guardar' }}
       </button>
 
-      <button type="button"
-        (click)="cancelar()"
-        class="px-4 py-2 bg-gray-500 text-white rounded-lg shadow hover:bg-gray-600">
+      <button type="button" (click)="cancelar()"
+              class="px-4 py-2 bg-gray-500 text-white rounded-lg shadow hover:bg-gray-600">
         Cancelar
       </button>
     </div>

@@ -1,32 +1,39 @@
-<div class="container mt-5 pt-4">
-  <div class="card shadow-sm">
-    <div class="card-body text-center">
-      <h2 class="mb-3 text-success">🎉 ¡Pedido realizado con éxito!</h2>
-      <p class="lead">Gracias por tu compra en <strong>Doña Beny</strong>.</p>
+<div class="container mt-4" *ngIf="!cargando && !error">
+  <div *ngFor="let pedido of pedidos" class="card mb-4 shadow-sm border-0 rounded-3">
+    <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white rounded-top">
+      <h5 class="mb-0">Pedido #{{ pedido.idPedido }}</h5>
+      <span class="badge" [ngClass]="{
+        'bg-warning': pedido.idEstado == 1,
+        'bg-info': pedido.idEstado == 2,
+        'bg-success': pedido.idEstado == 3
+      }">{{ getEstadoText(pedido.idEstado) }}</span>
+    </div>
 
-      <hr>
+    <div class="card-body">
+      <p class="text-muted mb-2">Fecha: {{ pedido.FechaPedido | date:'short' }}</p>
 
-      <!-- Resumen del pedido -->
-      <h4 class="mb-3">Resumen del Pedido</h4>
-      <ul class="list-group list-group-flush text-start mb-3">
-        <li *ngFor="let item of items" class="list-group-item d-flex justify-content-between">
-          <span>{{ item.nombre }} (x{{ item.cantidad || 1 }})</span>
-          <strong>S/ {{ item.precio * (item.cantidad || 1) }}</strong>
+      <ul class="list-group list-group-flush mb-3">
+        <li class="list-group-item d-flex justify-content-between align-items-center"
+            *ngFor="let d of pedido.detalles">
+          <div>
+            <strong>{{ d.nombrePlato }}</strong> x{{ d.Cantidad }}
+            <p class="mb-0 text-muted">{{ d.PrecioUnitario | currency:'S/':'symbol' }} c/u</p>
+          </div>
+          <span class="fw-bold">{{ d.Subtotal | currency:'S/':'symbol' }}</span>
         </li>
       </ul>
 
-      <h4 class="mt-2">Total: <span class="text-danger">S/ {{ getTotal() }}</span></h4>
-
-      <hr>
-
-      <!-- Datos cliente -->
-      <p><strong>Cliente:</strong> {{ userEmail }}</p>
-      <p><strong>Fecha:</strong> {{ fecha | date:'short' }}</p>
-
-      <div class="d-grid gap-2 mt-4">
-        <a routerLink="/" class="btn btn-primary btn-lg">Volver al inicio</a>
-        <a routerLink="/menu" class="btn btn-outline-secondary">Seguir comprando</a>
+      <div class="d-flex justify-content-end align-items-center">
+        <h6>Total: <span class="text-success">{{ getTotal(pedido.detalles) | currency:'S/':'symbol' }}</span></h6>
       </div>
     </div>
   </div>
+</div>
+
+<div *ngIf="cargando" class="text-center mt-5">
+  <p class="fs-5">Cargando pedidos...</p>
+</div>
+
+<div *ngIf="error" class="alert alert-danger mt-5 text-center fs-5">
+  {{ error }}
 </div>

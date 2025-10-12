@@ -3,41 +3,49 @@
     <div class="container">
       <a class="navbar-brand fw-bold" routerLink="/">Doña Beny</a>
 
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
 
       <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
         <ul class="navbar-nav gap-3">
-          <!-- Opciones generales -->
           <li class="nav-item">
-            <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-              Principal
-            </a>
+            <a class="nav-link"
+              routerLink="/"
+              routerLinkActive="active"
+              [routerLinkActiveOptions]="{ exact: true }">Principal</a>
           </li>
+
           <li class="nav-item">
             <a class="nav-link" routerLink="/menu" routerLinkActive="active">Menú</a>
           </li>
+
           <li class="nav-item">
             <a class="nav-link" routerLink="/contacto" routerLinkActive="active">Contacto</a>
           </li>
-          <li class="nav-item">
+
+          <!-- 👇 Solo se muestra si el usuario está logeado -->
+          <li class="nav-item" *ngIf="isLoggedIn">
             <a class="nav-link" routerLink="/cliente/pedido" routerLinkActive="active">Pedido</a>
           </li>
 
-          <!-- 🔔 Carrito dinámico -->
           <li class="nav-item position-relative">
             <a class="nav-link" routerLink="/cliente/carrito">
               <i class="bi bi-cart3 fs-5"></i>
               <span *ngIf="carritoCount > 0"
-                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
                 {{ carritoCount }}
               </span>
             </a>
           </li>
 
-          <!-- Sesión -->
           <li class="nav-item" *ngIf="!isLoggedIn">
             <a class="nav-link" routerLink="/cliente/login">Iniciar Sesión</a>
           </li>
@@ -49,17 +57,17 @@
             </div>
           </li>
 
-          <!-- 🔹 Botón de Admin (solo visible si es admin) -->
           <li class="nav-item" *ngIf="isAdmin">
             <a class="btn btn-dark" routerLink="/admin">Panel Admin</a>
           </li>
 
-          <!-- Botón promoción (para todos) -->
           <li class="nav-item">
             <a class="btn btn-danger" routerLink="/promo">Promoción</a>
           </li>
         </ul>
+
       </div>
     </div>
   </nav>
 </header>
+

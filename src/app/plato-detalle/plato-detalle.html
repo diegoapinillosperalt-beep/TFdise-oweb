@@ -5,14 +5,18 @@
 
       <!-- Imagen a la izquierda -->
       <div class="detalle-img-container mb-3 mb-lg-0 me-lg-4">
-        <img [src]="plato.img" [alt]="plato.nombre" class="detalle-img rounded">
+        <img 
+  [src]="plato.URLImagen ? 'http://localhost:3000/uploads/' + plato.URLImagen : 'assets/placeholder.png'" 
+  [alt]="plato.Plato" 
+  class="detalle-img rounded">
+
       </div>
 
       <!-- Información a la derecha -->
       <div class="detalle-info text-center text-lg-start">
-        <h1 class="fw-bold text-dark mb-4 display-4">{{ plato.nombre }}</h1>
-        <p class="fs-5 text-secondary mb-4" style="line-height:1.7;">{{ plato.descripcion }}</p>
-        <p class="fs-3 fw-bold text-warning mb-4">Precio: S/ {{ plato.precio }}</p>
+        <h1 class="fw-bold text-dark mb-4 display-4">{{ plato.Plato }}</h1>
+        <p class="fs-5 text-secondary mb-4" style="line-height:1.7;">{{ plato.Descripcion }}</p>
+        <p class="fs-3 fw-bold text-warning mb-4">Precio: S/ {{ plato.Precio }}</p>
         <a routerLink="/menu" class="btn btn-danger btn-lg">⬅ Volver al menú</a>
       </div>
 

@@ -1,46 +1,49 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule,CommonModule],
-  template: `
-    <div class="container mt-5" style="max-width: 400px;">
-      <h2 class="mb-3">Iniciar Sesión</h2>
-      <form (ngSubmit)="onLogin()">
-        <input type="email" [(ngModel)]="email" name="email" placeholder="Correo" class="form-control mb-2" required>
-        <input type="password" [(ngModel)]="password" name="password" placeholder="Contraseña" class="form-control mb-3" required>
-        <button type="submit" class="btn btn-danger w-100">Ingresar</button>
-      </form>
-
-      <div *ngIf="errorMessage" class="text-danger mt-3">
-        {{ errorMessage }}
-      </div>
-    </div>
-  `
+  imports: [FormsModule, CommonModule,RouterModule],
+  templateUrl: './login.html',
+  styleUrls: ['./login.css']
 })
 export class Login {
-  email = '';
-  password = '';
+  correo = '';
+  contrasena = '';
   errorMessage = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  logoVisible: boolean = true;
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   onLogin() {
-    const success = this.authService.login(this.email, this.password);
+    const data = { correo: this.correo, contrasena: this.contrasena };
 
-    if (success) {
-      if (this.authService.isAdmin()) {
-        this.router.navigate(['/admin/pedidos']); // 🔥 admin va directo al panel
-      } else {
-        this.router.navigate(['/']); // cliente normal al inicio
-      }
-    } else {
-      this.errorMessage = 'Usuario o contraseña incorrectos';
-    }
+    this.http.post('http://localhost:3000/api/auth/login', data)
+      .subscribe({
+        next: (res: any) => {
+          // Guardar idUsuario, email e isAdmin
+          this.authService.setLogin({
+            idUsuario: res.idUsuario,
+            email: res.correo,
+            isAdmin: res.isAdmin
+          });
+
+          // Redirigir según rol
+          if (res.isAdmin) this.router.navigate(['/admin/pedidos']);
+          else this.router.navigate(['/']);
+        },
+        error: (err) => {
+          this.errorMessage = err.error?.message || 'Usuario o contraseña incorrectos';
+        }
+      });
   }
 }

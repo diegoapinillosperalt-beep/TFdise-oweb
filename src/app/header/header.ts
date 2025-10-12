@@ -15,7 +15,7 @@ export class Header {
   carritoCount = 0;
   isLoggedIn = false;
   userEmail: string | null = null;
-  isAdmin = false; // 🔥 bandera para admins
+  isAdmin = false;
 
   constructor(
     private carritoService: CarritoService,
@@ -23,20 +23,19 @@ export class Header {
   ) {}
 
   ngOnInit() {
-    // ✅ carrito
+    // Carrito
     this.carritoCount = this.getCarritoCount();
     this.carritoService.itemsChanged.subscribe((items: any[]) => {
       this.carritoCount = this.getCarritoCount(items);
     });
 
-    // ✅ login
+    // Login
     this.authService.isLoggedIn$.subscribe(status => this.isLoggedIn = status);
     this.authService.userEmail$.subscribe(email => this.userEmail = email);
-
-    // ✅ admin (ejemplo: tu AuthService debería exponer un observable/flag)
     this.authService.isAdmin$.subscribe(role => this.isAdmin = role);
 
-    this.authService.checkLocalStorage(); // recuperar sesión
+    // Recuperar sesión desde localStorage al iniciar
+    this.authService.checkLocalStorage();
   }
 
   private getCarritoCount(items?: any[]): number {

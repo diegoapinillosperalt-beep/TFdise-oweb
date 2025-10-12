@@ -5,70 +5,80 @@ import { BehaviorSubject } from 'rxjs';
 export class AuthService {
   private loggedIn = new BehaviorSubject<boolean>(false);
   private userEmail = new BehaviorSubject<string | null>(null);
+  private userId = new BehaviorSubject<number | null>(null);
   private admin = new BehaviorSubject<boolean>(false);
 
-  // observables
   isLoggedIn$ = this.loggedIn.asObservable();
   userEmail$ = this.userEmail.asObservable();
+  userId$ = this.userId.asObservable();
   isAdmin$ = this.admin.asObservable();
 
-  // 🔥 usuarios fijos para prueba
-  private usuarios = [
-    { email: 'user@dbeny.com', password: '1234', isAdmin: false },
-    { email: 'admin@dbeny.com', password: '1234', isAdmin: true }
-  ];
+  constructor() {
+    this.checkLocalStorage();
+  }
 
-  // auth.ts
-login(email: string, password: string): boolean {
-  const usuarios = [
-    { email: 'user@dbeny.com', password: '1234', isAdmin: false },
-    { email: 'admin@dbeny.com', password: '1234', isAdmin: true }
-  ];
+  setLogin(usuario: { idUsuario: number; email: string; isAdmin: boolean }) {
+    if (!usuario || usuario.idUsuario == null) {
+      console.error('setLogin: idUsuario no está definido', usuario);
+      return;
+    }
 
-  const usuario = usuarios.find(u => u.email === email && u.password === password);
-
-  if (usuario) {
     this.loggedIn.next(true);
     this.userEmail.next(usuario.email);
+    this.userId.next(usuario.idUsuario);
     this.admin.next(usuario.isAdmin);
 
     localStorage.setItem('userEmail', usuario.email);
+    localStorage.setItem('userId', usuario.idUsuario.toString());
     localStorage.setItem('isAdmin', usuario.isAdmin ? 'true' : 'false');
-    return true;
   }
-
-  return false;
-}
 
   logout() {
     this.loggedIn.next(false);
     this.userEmail.next(null);
+    this.userId.next(null);
     this.admin.next(false);
+
     localStorage.removeItem('userEmail');
+    localStorage.removeItem('userId');
     localStorage.removeItem('isAdmin');
   }
 
   checkLocalStorage() {
     const email = localStorage.getItem('userEmail');
+    const id = localStorage.getItem('userId');
     const isAdmin = localStorage.getItem('isAdmin') === 'true';
 
-    if (email) {
+    if (email && id) {
       this.loggedIn.next(true);
       this.userEmail.next(email);
+      this.userId.next(+id);
       this.admin.next(isAdmin);
     }
   }
 
-  // getters sincronizados
-  isLoggedIn(): boolean {
-    return this.loggedIn.value;
+  getUserId(): number | null {
+    return this.userId.value;
   }
 
-  getUser(): string | null {
+  getUserEmail(): string | null {
     return this.userEmail.value;
   }
 
   isAdmin(): boolean {
     return this.admin.value;
   }
+
+  isLoggedIn(): boolean {
+    return this.loggedIn.value;
+  }
+
+  getUser() {
+  return {
+    id: this.userId.value,
+    email: this.userEmail.value,
+    isAdmin: this.admin.value
+  };
+}
+
 }
