@@ -1,0 +1,64 @@
+<div style="max-width:400px; margin:80px auto; padding:20px; border:1px solid #ddd; border-radius:8px;">
+  <h2 style="text-align:center;">Iniciar sesión</h2>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="errorMessage" style="color:red; margin-bottom:8px;">
+    {{ errorMessage }}
+  </div>
+
+  <form (ngSubmit)="onLogin()" #loginForm="ngForm" novalidate>
+    <div style="margin-bottom:10px;">
+      <label>Correo:</label><br>
+      <input
+        type="email"
+        [(ngModel)]="correo"
+        name="correo"
+        required
+        placeholder="ejemplo@correo.com"
+        class="form-control"
+      >
+    </div>
+
+    <div style="margin-bottom:10px;">
+      <label>Contraseña:</label><br>
+      <input
+        type="password"
+        [(ngModel)]="contrasena"
+        name="contrasena"
+        required
+        placeholder="••••••••"
+        class="form-control"
+      >
+    </div>
+
+    <!-- Botón Ingresar -->
+      <button
+        type="submit"
+        class="btn btn-danger btn-lg w-100 fw-semibold"
+        style="border-radius: 0.5rem;"
+        [disabled]="cargando || loginForm.invalid"
+      >
+        <ng-container *ngIf="!cargando; else cargandoTpl">Ingresar</ng-container>
+        <ng-template #cargandoTpl>
+          <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          Verificando...
+    </ng-template>
+  </button>
+  </form>
+  <!-- Registro -->
+    <div class="text-center mt-4">
+      <small class="text-muted">
+        ¿No tienes cuenta?
+        <a routerLink="/cliente/registro" class="text-danger text-decoration-none fw-semibold">
+        Regístrate aquí
+        </a>
+      </small>
+    </div>
+
+    <!-- Pie -->
+    <div class="text-center mt-3">
+      <small class="text-muted">
+        © 2025 Doña Beny — Autenticación segura con AWS
+      </small>
+    </div>
+</div>

@@ -1,0 +1,67 @@
+<!-- Cargando / Error / Vacío (igual que antes si ya lo tienes) -->
+
+<div class="container mt-4" *ngIf="!cargando && !error && pedidos.length > 0">
+  <div *ngFor="let pedido of pedidos; trackBy: trackByPedido"
+       class="card mb-4 shadow-sm border-0 rounded-3 overflow-hidden">
+
+    <!-- Header clickable -->
+    <button type="button"
+            class="pedido-header btn w-100 text-start d-flex align-items-center justify-content-between"
+            (click)="toggle(pedido.idPedido)"
+            aria-expanded="{{ isExpanded(pedido.idPedido) }}"
+            [attr.aria-controls]="'pedido-panel-' + pedido.idPedido">
+      <div class="d-flex align-items-center gap-2">
+        <div class="pedido-title">Pedido #{{ pedido.idPedido }}</div>
+        <span class="badge" [ngClass]="statusClass(pedido.idEstado)">
+          {{ getEstadoText(pedido.idEstado) }}
+        </span>
+      </div>
+
+      <div class="d-flex align-items-center gap-3">
+        <small class="text-light d-none d-md-inline">
+          {{ fmtDate(pedido.FechaPedido || pedido.fecha || pedido.fechaPedido) }}
+        </small>
+        <span class="chevron"
+              [class.rotate]="isExpanded(pedido.idPedido)">▾</span>
+      </div>
+    </button>
+
+    <!-- Panel expandible -->
+    <div [id]="'pedido-panel-' + pedido.idPedido"
+         class="pedido-panel"
+         [class.open]="isExpanded(pedido.idPedido)">
+
+      <div class="card-body">
+        <p class="text-muted mb-3 d-md-none">
+          Fecha: {{ fmtDate(pedido.FechaPedido || pedido.fecha || pedido.fechaPedido) }}
+        </p>
+
+        <ul class="list-group list-group-flush mb-3">
+          <li class="list-group-item d-flex justify-content-between align-items-center"
+              *ngFor="let d of pedido.detalles; trackBy: trackByDetalle">
+            <div class="me-3">
+              <strong>{{ d.nombrePlato || ('Plato #' + (d.idPlato ?? '')) }}</strong>
+              &nbsp;x{{ d.Cantidad ?? d.cantidad }}
+              <p class="mb-0 text-muted">
+                {{ fmtMoney(d.PrecioUnitario ?? d.precio) }} c/u
+              </p>
+            </div>
+            <span class="fw-bold">
+              {{ fmtMoney(lineSubtotal(d)) }}
+            </span>
+          </li>
+        </ul>
+
+        <div class="d-flex justify-content-end align-items-center">
+          <h6 class="mb-0">
+            Total:
+            <span class="text-success">
+              {{ fmtMoney(pedido.Total ?? getTotal(pedido.detalles)) }}
+            </span>
+          </h6>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

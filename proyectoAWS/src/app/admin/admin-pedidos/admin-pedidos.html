@@ -1,0 +1,65 @@
+<div class="container mt-5" *ngIf="pedidos.length > 0; else noPedidos">
+  <div *ngFor="let pedido of pedidos" class="card mb-4 shadow-sm border-primary">
+
+    <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+      <span>Pedido #{{ pedido.idPedido }}</span>
+      <small>{{ fmtDate(pedido.FechaPedido) }}</small>
+    </div>
+
+    <div class="card-body">
+      <p class="mb-2">
+        <strong>Cliente:</strong> {{ pedido.cliente }}
+      </p>
+
+      <!-- Estado + botón Aceptar -->
+      <div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
+        <label class="form-label mb-0 me-2"><strong>Estado:</strong></label>
+
+        <select
+          class="form-select form-select-sm w-auto d-inline-block"
+          [(ngModel)]="pedido.estadoSeleccionado"
+          [disabled]="pedido.cargando"
+        >
+          <option *ngFor="let e of estados" [value]="e.id">{{ e.nombre }}</option>
+        </select>
+
+        <button
+          class="btn btn-sm btn-primary"
+          (click)="aceptarCambio(pedido)"
+          [disabled]="pedido.cargando || !puedeAceptar(pedido)"
+        >
+          <span *ngIf="!pedido.cargando">Aceptar</span>
+          <span *ngIf="pedido.cargando" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        </button>
+
+        <span class="badge ms-2" [ngClass]="statusClass(pedido.idEstado)">
+          {{ getNombreEstado(pedido.idEstado) }}
+        </span>
+      </div>
+
+      <!-- Detalle -->
+      <ul class="list-group list-group-flush mb-3">
+        <li class="list-group-item d-flex justify-content-between align-items-center"
+            *ngFor="let d of pedido.detalles">
+          <div>
+            <strong>{{ d.nombrePlato }}</strong>
+            &nbsp;x{{ d.Cantidad }}
+            <div class="text-muted small">S/ {{ (d.PrecioUnitario || 0) | number:'1.2-2' }} c/u</div>
+          </div>
+          <span class="fw-bold">S/ {{ (d.Subtotal || 0) | number:'1.2-2' }}</span>
+        </li>
+      </ul>
+
+      <div class="d-flex justify-content-end">
+        <strong>Total: {{ fmtMoney(getTotal(pedido.detalles)) }}</strong>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<ng-template #noPedidos>
+  <div class="text-center mt-5">
+    <p class="fs-5 text-muted">No hay pedidos disponibles.</p>
+  </div>
+</ng-template>

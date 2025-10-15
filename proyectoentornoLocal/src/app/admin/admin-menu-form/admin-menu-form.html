@@ -1,0 +1,75 @@
+<div class="container mt-4 mb-5">
+  <div class="card shadow-sm border-0">
+    <div class="card-body">
+      <h3 class="text-center mb-4 text-danger fw-bold">
+        {{ editMode ? '✏️ Editar Producto' : '➕ Agregar Producto' }}
+      </h3>
+
+      <form (ngSubmit)="guardarProducto()" #formProducto="ngForm">
+
+        <!-- Nombre del plato -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Nombre del plato</label>
+          <input type="text" [(ngModel)]="producto.Plato" name="nombre" required class="form-control"
+                 placeholder="Ej: Lomo Saltado">
+        </div>
+
+        <!-- Descripción -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Descripción</label>
+          <textarea [(ngModel)]="producto.Descripcion" name="descripcion" rows="3"
+                    class="form-control" placeholder="Describe brevemente el plato..." required></textarea>
+        </div>
+
+        <!-- Precio -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Precio (S/)</label>
+          <input type="number" [(ngModel)]="producto.Precio" name="precio" step="0.01" required min="0"
+                 class="form-control" placeholder="Ej: 25.00">
+        </div>
+
+        <!-- Categoría -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Categoría</label>
+          <select [(ngModel)]="producto.idCategoria" name="idCategoria" class="form-select" required>
+            <option value="" disabled>-- Seleccione categoría --</option>
+            <option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nombre }}</option>
+          </select>
+        </div>
+
+        <!-- Imagen -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Imagen del plato</label>
+          <input type="file" (change)="onFileSelected($event)" accept="image/*" class="form-control">
+
+          <!-- Vista previa -->
+          <div class="text-center mt-3">
+            <img
+              [src]="
+                imagenSeleccionada
+                  ? imagenTemporal
+                  : (producto.URLImagen
+                      ? (producto.URLImagen.startsWith('http')
+                          ? producto.URLImagen
+                          : 'http://localhost:3000/uploads/' + producto.URLImagen)
+                      : 'assets/sin-foto.png')
+              "
+              alt="Vista previa"
+              class="img-thumbnail rounded shadow-sm"
+              style="max-width: 200px; max-height: 200px; object-fit: cover;"
+            >
+          </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="text-center mt-4">
+          <button type="submit" class="btn btn-success px-4 me-2" [disabled]="formProducto.invalid">
+            {{ editMode ? 'Actualizar' : 'Guardar' }}
+          </button>
+          <button type="button" (click)="cancelar()" class="btn btn-secondary px-4">Cancelar</button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

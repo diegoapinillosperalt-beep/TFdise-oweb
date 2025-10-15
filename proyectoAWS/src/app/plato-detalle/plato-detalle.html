@@ -1,0 +1,24 @@
+<section class="plato-detalle-section" *ngIf="plato">
+  <div class="overlay"></div>
+  <div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card detalle-card shadow-lg p-4 d-flex flex-lg-row flex-column align-items-center">
+      <!-- Imagen -->
+      <div class="detalle-img-container mb-3 mb-lg-0 me-lg-4">
+        <img [src]="plato.img" [alt]="plato.nombre" class="detalle-img rounded" />
+      </div>
+
+      <!-- Info -->
+      <div class="detalle-info text-center text-lg-start">
+        <h1 class="fw-bold text-dark mb-4 display-4">{{ plato.nombre }}</h1>
+        <p class="fs-5 text-secondary mb-4">{{ plato.descripcion }}</p>
+        <p class="fs-3 fw-bold text-warning mb-4">Precio: S/ {{ plato.precio }}</p>
+        <a routerLink="/menu" class="btn btn-danger btn-lg">⬅ Volver al menú</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Mensaje de carga -->
+<div *ngIf="cargando" class="text-center mt-5">
+  <p class="fs-4 text-muted">Cargando detalle del plato...</p>
+</div>

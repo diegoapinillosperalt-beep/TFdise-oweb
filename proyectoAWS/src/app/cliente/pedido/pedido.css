@@ -1,0 +1,53 @@
+/* Header del pedido como barra clickable */
+.pedido-header {
+  background: linear-gradient(180deg, #2f6fe0 0%, #2456b8 100%);
+  color: #fff;
+  padding: 12px 16px;
+  border: 0;
+  border-radius: 0;
+}
+.pedido-header:hover {
+  background: linear-gradient(180deg, #2b66cf 0%, #204ea6 100%);
+}
+
+/* Chevron que rota */
+.chevron {
+  display: inline-block;
+  transition: transform 180ms ease;
+  font-size: 18px;
+  line-height: 1;
+}
+.chevron.rotate {
+  transform: rotate(180deg);
+}
+
+/* Panel con transición de altura (simple) */
+.pedido-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 240ms ease;
+}
+.pedido-panel.open {
+  max-height: 800px; /* suficiente para el contenido; ajusta si necesitas */
+}
+
+/* Título del pedido */
+.pedido-title {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* Ajustes de lista */
+.list-group-item {
+  border-color: #eef2f7 !important;
+}
+.list-group-item:not(:last-child) {
+  border-bottom-style: dashed !important;
+}
+
+/* Badge (usa las clases que ya tenías) */
+.badge { padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+.badge-success { background: #e7f8ef; color:#107a3a; }
+.badge-info    { background: #eaf5ff; color:#0b5ed7; }
+.badge-warning { background: #fff4e5; color:#b36a00; }
+.badge-muted   { background: #f0f1f3; color:#6b7280; }

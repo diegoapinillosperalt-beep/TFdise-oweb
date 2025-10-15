@@ -1,0 +1,100 @@
+/* Contenedor general */
+.cards-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding-top: 80px; /* espacio para navbar fija */
+  padding-bottom: 2rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* Card individual */
+.card {
+  background-color: #fef2f2;
+  border-left: 6px solid #f87171; /* color por defecto: pendiente */
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px rgba(0,0,0,0.2);
+}
+
+/* Estados de la card */
+.card-pendiente {
+  background-color: #fef2f2;
+  border-left: 6px solid #f87171;
+}
+
+.card-en-camino {
+  background-color: #fef9f2;
+  border-left: 6px solid #fbbf24;
+}
+
+.card-entregado {
+  background-color: #f0fdf4;
+  border-left: 6px solid #16a34a;
+}
+
+/* Estado texto */
+.estado-pendiente { color: #b91c1c; font-weight: bold; }
+.estado-en-camino { color: #b45309; font-weight: bold; }
+.estado-entregado { color: #166534; font-weight: bold; }
+
+/* Botones */
+.btn {
+  padding: 6px 12px;
+  border-radius: 9999px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btn-en-camino {
+  background-color: #f59e0b;
+}
+
+.btn-en-camino:hover {
+  background-color: #d97706;
+}
+
+.btn-entregado {
+  background-color: #16a34a;
+}
+
+.btn-entregado:hover {
+  background-color: #15803d;
+}
+
+/* Icono de estado */
+.icono-estado {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid;
+}
+
+.icono-pendiente {
+  background-color: #fca5a5;
+  border-color: #b91c1c;
+}
+
+.icono-en-camino {
+  background-color: #fde68a;
+  border-color: #b45309;
+}
+
+.icono-entregado {
+  background-color: #bbf7d0;
+  border-color: #166534;
+}

@@ -1,0 +1,49 @@
+<div class="container py-5">
+  <h2 class="mb-4 text-center">📦 Datos del Pedido</h2>
+
+  <form #datosForm="ngForm" (ngSubmit)="continuarAlPago()">
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Nombre completo</label>
+        <input type="text" class="form-control" required [(ngModel)]="datos.nombre" name="nombre">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Teléfono</label>
+        <input type="tel" class="form-control" required [(ngModel)]="datos.telefono" name="telefono">
+      </div>
+
+      <div class="col-12">
+        <label class="form-label fw-semibold">Dirección de entrega</label>
+        <input type="text" class="form-control" required [(ngModel)]="datos.direccion" name="direccion">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Método de entrega</label>
+        <select class="form-select" [(ngModel)]="datos.entrega" name="entrega" required>
+          <option value="delivery">Delivery</option>
+          <option value="recojo">Recojo en tienda</option>
+        </select>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label fw-semibold">Método de pago</label>
+        <select class="form-select" [(ngModel)]="datos.pago" name="pago" required>
+          <option value="tarjeta">Tarjeta</option>
+          <option value="efectivo">Efectivo</option>
+        </select>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label fw-semibold">Notas adicionales (opcional)</label>
+        <textarea class="form-control" rows="3" [(ngModel)]="datos.notas" name="notas" placeholder="Ejemplo: Sin picante, entregar en portería..."></textarea>
+      </div>
+    </div>
+
+    <div class="text-end mt-4">
+      <button type="submit" class="btn btn-primary btn-lg">
+        Continuar al pago 💳
+      </button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,55 @@
+.wrap{ max-width:1080px; margin:0 auto; padding:24px 16px; }
+.ttl{ text-align:center; font-size:28px; font-weight:800; margin:8px 0 16px; }
+.grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; } 
+@media (max-width: 900px){ .grid{ grid-template-columns:1fr; } }
+
+.card{ background:#EDE8D0; border:1px dashed var(--line); border-radius:12px; padding:16px; box-shadow: 0 1px 4px; flex-direction: column; background-color:rgba (0,0,0,.04); }
+.card h3{ font-size:25px; margin:0 0 10px; }
+.info ul{ margin:0; padding-left:18px; line-height:1.8; }
+
+.form form{ display:flex; flex-direction:column; gap:12px; }
+.row{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+@media (max-width: 640px){ .row{ grid-template-columns:1fr; } }
+
+label{ font-size:13px; display:flex; flex-direction:column; gap:6px; }
+input, textarea{ padding:10px 12px; border:1px solid #000000; border-radius:10px; outline:none; }
+input:focus, textarea:focus{ border-color:#bbb; }
+
+/* ====== BOTÓN: SIEMPRE VISIBLE Y DESTACADO ====== */
+.actions{ margin-top:4px; }
+.btn-enviar{
+  display:inline-block;
+  background:#d72638;        /* color del botón (ajústalo a tu marca) */
+  color:#fff;
+  padding:10px 16px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:600;
+  box-shadow:0 1px 3px rgba(0,0,0,.08);
+  transition: transform .06s ease, opacity .15s ease;
+}
+.btn-enviar:hover{ transform: translateY(-1px); }
+.btn-enviar:active{ transform: translateY(0); }
+
+/* Si está disabled, que SIGA visible (solo más clara) */
+.btn-enviar:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+/* Por si algún reset global ocultara los disabled */
+button[disabled]{ visibility:visible; }
+
+/* ====== FIN BOTÓN ====== */
+
+.hint{ font-size:11px; color:#6b7280; margin-top:4px; }
+.ok{ color: #0a7f2e; font-size:13px; }
+
+.footer {
+  background: #222;
+  color: #fff;
+  text-align: center;
+  padding: 15px;
+  font-size: 0.9rem;
+}
+

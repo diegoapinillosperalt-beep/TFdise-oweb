@@ -1,0 +1,106 @@
+<!-- NUESTROS PLATOS -->
+<section class="py-5 platos-section">
+  <div class="container text-center">
+    <br>
+    <h1 class="fw-bold mb-3 display-4 text-danger">Nuestros Platos</h1>
+    <p class="mx-auto mb-5 px-3 fs-5" style="max-width: 800px;">
+      En <strong>Doña Beny</strong> te ofrecemos lo mejor de la comida criolla peruana.
+      Disfruta de una selección de platos preparados con ingredientes frescos y todo el sabor casero.
+    </p>
+
+    <!-- ==================== -->
+    <!-- Barra superior de categorías -->
+    <!-- ==================== -->
+    <nav class="catbar mb-5" *ngIf="categorias.length > 0">
+      <div class="d-flex flex-wrap justify-content-center gap-3 px-3">
+        <button
+          class="btn fw-bold text-uppercase"
+          *ngFor="let c of categorias"
+          (click)="goTo(c)"
+          [ngClass]="{
+            'btn-danger text-white shadow': activeCategoria === c,
+            'btn-outline-light': activeCategoria !== c
+          }"
+          style="background-color: #bf986a; border: none;"
+        >
+          {{ c }}
+        </button>
+      </div>
+    </nav>
+
+    <!-- ==================== -->
+    <!-- Barra de búsqueda -->
+    <!-- ==================== -->
+    <div class="row mb-4">
+      <div class="col-md-6 mx-auto">
+        <input
+          type="text"
+          class="form-control form-control-lg"
+          placeholder="Buscar plato..."
+          [(ngModel)]="searchTerm"
+          (ngModelChange)="onBuscar()" />
+      </div>
+    </div>
+
+    <!-- ==================== -->
+    <!-- Indicadores de carga y error -->
+    <!-- ==================== -->
+    <div *ngIf="cargando" class="text-muted fs-5 my-5">
+      <div class="spinner-border text-danger" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="mt-3">Cargando platos, por favor espera...</p>
+    </div>
+
+    <div *ngIf="!cargando && errorApi" class="alert alert-warning text-center mt-4">
+      <strong>⚠️ Error al conectar con la API.</strong> Mostrando platos locales.
+    </div>
+
+    <!-- ==================== -->
+    <!-- Secciones por Categoría -->
+    <!-- ==================== -->
+    <div class="content text-start" *ngIf="!cargando">
+      <ng-container *ngFor="let c of categorias">
+        <section class="cat-section mb-5" [attr.id]="'cat-' + slug(c)">
+          <h2 class="fw-bold mb-4 text-danger border-bottom border-3 pb-2">{{ c }}</h2>
+
+          <div class="row g-4 justify-content-center">
+            <div
+              class="col-lg-4 col-md-6"
+              *ngFor="let p of agrupado[c]"
+            >
+              <div class="card h-100 shadow border-0 hover-card plato-item">
+                <img
+                  [src]="p.img"
+                  [alt]="p.nombre"
+                  class="card-img-top"
+                  style="height: 250px; object-fit: cover;"
+                />
+                <div class="card-body text-center">
+                  <h4 class="card-title">{{ p.nombre }}</h4>
+                  <p *ngIf="p.descripcion" class="text-secondary small mb-2">{{ p.descripcion }}</p>
+                  <p class="text-warning fw-bold fs-5">S/ {{ p.precio }}</p>
+                  <div class="d-flex justify-content-center gap-2">
+                    <button class="btn btn-success btn-lg" (click)="agregarAlCarrito(p)">
+                      Agregar al carrito
+                    </button>
+                    <a [routerLink]="['/plato', p.id]" class="btn btn-danger btn-lg">
+                      Ver más
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </ng-container>
+
+      <!-- ==================== -->
+      <!-- Mensaje si no hay resultados -->
+      <!-- ==================== -->
+      <div class="text-center text-muted mt-5" *ngIf="categorias.length === 0">
+        <p class="fs-5">No se encontraron platos con ese nombre.</p>
+      </div>
+    </div>
+  </div>
+</section>

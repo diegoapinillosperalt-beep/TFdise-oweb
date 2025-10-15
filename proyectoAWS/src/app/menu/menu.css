@@ -1,0 +1,94 @@
+/* 🎨 Sección principal del menú */
+.platos-section {
+  background: linear-gradient(180deg, #f6f1eb, #cdc8c5); /* Fondo sutil y elegante */
+  padding-bottom: 60px;
+}
+
+/* 💫 Efecto de transición de las tarjetas */
+.hover-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  opacity: 0; /* Oculto al inicio para la animación */
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+.hover-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* ✨ Animación de aparición */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px); /* Aparece desde abajo */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 🧾 Tarjetas de plato individuales */
+.card {
+  border-radius: 15px;
+  overflow: hidden;
+  background: #fff;
+}
+
+/* 🖼️ Imagen de los platos */
+.card-img-top {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+/* 💬 Texto del cuerpo */
+.card-body {
+  padding: 20px;
+}
+
+/* 🛒 Botones del menú */
+.btn-success {
+  background-color: #198754;
+  border: none;
+  transition: background 0.3s;
+}
+
+.btn-success:hover {
+  background-color: #157347;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border: none;
+  transition: background 0.3s;
+}
+
+.btn-danger:hover {
+  background-color: #bb2d3b;
+}
+
+/* 🧠 Footer general (si se muestra en la página de menú) */
+.footer {
+  background: #222;
+  color: #fff;
+  text-align: center;
+  padding: 15px;
+  font-size: 0.9rem;
+  margin-top: 60px;
+}
+
+/* ✨ Responsividad */
+@media (max-width: 768px) {
+  .platos-section h1 {
+    font-size: 2rem;
+  }
+
+  .card-body {
+    padding: 15px;
+  }
+
+  .btn-lg {
+    font-size: 0.9rem;
+    padding: 10px 16px;
+  }
+}
